@@ -1,32 +1,46 @@
 import random
 
 while True:
-    number = random.randint(1, 100)  # Generate a random number between 1 and 100
-    attempts = 0  # Initialize the attempt counter
-    print("\nNew game started! You have 3 guesses to find the number.")
+    number = random.randint(1, 100)
+    attempts = 0
+    print("\nNew game started! You have 3 guesses.")
+    print("Guess a number between 1 and 100.")
 
     while attempts < 3:
-        user = input("Enter your guess (or 'q' to quit): ")
-        if user == 'q':
-            print('You quit the game. Thank you for playing!')
-            exit()  # Exit the game completely
+        user = input("Enter your guess (or 'q' to quit): ").strip()
 
-        user = int(user)  # Convert the input to an integer
-        attempts += 1  # Increment the attempt counter
+        if user.lower() == 'q':
+            print("Thank you for playing! Goodbye!")
+            raise SystemExit
 
-        if user == number:
+        # Check whether the input is a whole number
+        try:
+            guess = int(user)
+        except ValueError:
+            print("Please enter a number between 1 and 100.")
+            continue
+
+        # Check whether the number is within the allowed range
+        if guess < 1 or guess > 100:
+            print("Please enter a number between 1 and 100.")
+            continue
+
+        # Only valid guesses count as attempts
+        attempts += 1
+
+        if guess == number:
             print("Congratulations! You guessed the correct number!")
             break
-        elif user < number:
+
+        if attempts == 3:
+            print(f"Game over! The correct number was {number}.")
+        elif guess < number:
             print("Your guess is too small. Try a larger number.")
         else:
             print("Your guess is too large. Try a smaller number.")
 
-        if attempts == 3:
-            print(f"Game over! The correct number was {number}.")
-    
-    # Ask the user if they want to play again
-    play_again = input("\nDo you want to play again? (y/n): ")
-    if play_again.lower() != 'y':
+    play_again = input("\nDo you want to play again? (y/n): ").strip().lower()
+
+    if play_again != 'y':
         print("Thank you for playing! Goodbye!")
         break
